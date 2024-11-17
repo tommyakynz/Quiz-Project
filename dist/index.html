@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethic-Trivia Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes timerPulse {
+            0% {
+                transform: scale(1);
+                color: green;
+            }
+
+            50% {
+                transform: scale(1.2);
+                color: yellow;
+            }
+
+            100% {
+                transform: scale(1.5);
+                color: red;
+            }
+        }
+
+        #timerQuiz {
+            animation: timerPulse 1s ease-out infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Subject Selection Page -->
+    <div id="subjectSelectionPage"
+        class="w-[300px] mt-12 bg-slate-400 justify-center align-middle flex-wrap p-4 m-auto rounded-lg">
+        <div class="bg-violet-950 text-white w-5 text-center font-serif m-auto mb-4">E</div>
+        <h1 class="text-indigo-950 text-center text-xl font-semibold mb-7">Ethic-Trivia</h1>
+        <p class="text-center text-sm mb-7">Welcome to this quiz app! Prepare to test your knowledge.</p>
+
+        <button class="bg-indigo-950 text-white rounded-sm mb-4 w-32 h-14 gap-4 hover:bg-indigo-500"
+            onclick="goToInstructions('math')">Math</button>
+        <button class="bg-indigo-950 text-white rounded-sm w-32 h-14 gap-4 hover:bg-indigo-500"
+            onclick="goToInstructions('english')">English</button><br>
+        <button class="bg-indigo-950 text-white rounded-sm mb-4 w-32 h-14 gap-4 hover:bg-indigo-500"
+            onclick="goToInstructions('chemistry')">Chemistry</button>
+        <button class="bg-indigo-950 text-white rounded-sm w-32 h-14 gap-4 hover:bg-indigo-500"
+            onclick="goToInstructions('physics')">Physics</button><br>
+        <button class="bg-indigo-950 text-white rounded-sm mb-4 w-32 h-14 gap-4 hover:bg-indigo-500"
+            onclick="goToInstructions('biology')">Biology</button>
+        <button class="bg-indigo-950 text-white rounded-sm w-32 h-14 gap-4 hover:bg-indigo-500"
+            onclick="goToInstructions('history')">History</button><br>
+        <button class="bg-indigo-950 text-white rounded-sm w-32 h-14 gap-4 hover:bg-indigo-500"
+            onclick="goToInstructions('literature')">Literature</button>
+        <button class="bg-indigo-950 text-white rounded-sm w-32 h-14 gap-4 hover:bg-indigo-500"
+            onclick="goToInstructions('philosophy')">Philosophy</button>
+        <u class="text-xs text-center mt-5 block">Developed by Tommyakynz</u>
+    </div>
+
+    <!-- Instructions Page -->
+    <div id="instructionsPage"
+        class="w-[300px] mt-12 bg-slate-400 justify-center align-middle flex-wrap p-4 m-auto rounded-lg"
+        style="display:none;">
+        <div class="bg-violet-950 text-white w-5 text-center font-serif m-auto mb-4">E</div>
+        <h1 class="text-indigo-950 text-center text-xl font-semibold mb-7">Ethic-Trivia</h1>
+        <p class="text-center text-sm mb-7">Follow the instructions below and click Start to begin the quiz.</p>
+
+        <u class="text-xs mb-3 text-center block"><b>Instructions</b></u>
+        <ul class="list-disc ml-4 text-sm text-gray-800">
+            <li>You have 60 minutes for all questions.</li>
+            <li>Read each question carefully before selecting an answer.</li>
+            <li>Use the "Next" button to proceed to the next question.</li>
+            <li>Feel free to skip questions and come back to them later.</li>
+            <li>Once the timer runs out, your answer will be automatically submitted.</li>
+        </ul>
+
+        <div id="timer" class="text-center font-bold text-lg text-black mt-5 mb-5">60:00</div>
+        <button class="bg-indigo-950 text-white rounded-sm w-32 h-14 gap-4 hover:bg-indigo-500 mx-auto block"
+            onclick="startQuiz()">START>></button>
+    </div>
+
+    <!-- Quiz Page -->
+    <div id="quizPage" class="w-[300px] mt-12 bg-slate-400 justify-center align-middle flex-wrap p-4 m-auto rounded-lg"
+        style="display:none;">
+
+        <div class="flex justify-between items-center mb-5">
+            <div id="questionNumber" class="text-2xl font-semibold ml-5">Question 1</div>
+            <div id="timerQuiz" class="text-xl font-bold text-black mr-5">60:00</div>
+        </div>
+
+        <!-- Question text -->
+        <div id="questionText" class="text-left text-lg font-semibold mb-6 ml-5">Question will appear here...</div>
+
+        <!-- Options -->
+        <div id="options" class="flex flex-col items-start ml-5 space-y-4">
+
+        </div>
+
+        <div class="mt-6 flex justify-between items-center">
+            <!-- Prev Button -->
+            <button class="navBtn bg-indigo-950 text-white rounded-sm w-24 h-10 hover:bg-indigo-500" id="prevBtn"
+                onclick="prevQuestion()" style="display:none;">Prev</button>
+
+            <!-- Next Button -->
+            <button class="navBtn bg-indigo-950 text-white rounded-sm w-24 h-10 hover:bg-indigo-500" id="nextBtn"
+                onclick="nextQuestion()">Next</button>
+        </div>
+
+        <!-- Submit Button -->
+        <button class="bg-indigo-950 text-white rounded-sm w-32 h-14 mt-6 mx-auto hover:bg-indigo-500" id="submitBtn"
+            onclick="submitQuiz()">Submit</button>
+    </div>
+    <!-- Result Page -->
+    <div id="resultPage"
+        class="w-[300px] mt-12 bg-slate-400 justify-center align-middle flex-wrap p-4 m-auto rounded-lg"
+        style="display:none;">
+        <div class="bg-violet-950 text-white w-5 text-center font-serif m-auto mb-4">E</div>
+        <h1 class="text-indigo-950 text-center text-xl font-semibold mb-7">Ethic-Trivia</h1>
+        <div id="resultMessage" class="text-center text-lg font-semibold mt-4"></div>
+        <u class="text-xs text-center mt-5 block">Developed by Tommyakynz</u>
+    </div>
+
+
+    <script>
+        let timer;
+        let timeLeft = 3600;
+        let interval;
+        let currentQuest = 0;
+
+
+        const questions = {
+            math: [
+                { question: "What is 2 + 2?", options: ["3", "4", "5", "6"], answer: "4" },
+                { question: "What is 5 x 3?", options: ["12", "15", "20", "25"], answer: "15" },
+                { question: "What is 12 ÷ 4?", options: ["1", "2", "3", "4"], answer: "3" },
+                { question: "What is 9 - 6?", options: ["1", "2", "3", "4"], answer: "3" },
+                { question: "What is 7 + 5?", options: ["10", "11", "12", "13"], answer: "12" },
+                { question: "What is 8 x 7?", options: ["54", "56", "58", "60"], answer: "56" },
+                { question: "What is 100 ÷ 5?", options: ["15", "20", "25", "30"], answer: "20" },
+                { question: "What is 12 x 12?", options: ["120", "144", "160", "180"], answer: "144" },
+                { question: "What is 50 ÷ 2?", options: ["15", "25", "30", "35"], answer: "25" },
+                { question: "What is 19 + 7?", options: ["24", "25", "26", "27"], answer: "26" }
+            ],
+            english: [
+                { question: "What is the opposite of 'happy'?", options: ["sad", "angry", "joyful", "content"], answer: "sad" },
+                { question: "Which word is a noun?", options: ["run", "quick", "dog", "beautiful"], answer: "dog" },
+                { question: "What is the past tense of 'go'?", options: ["went", "gone", "going", "will go"], answer: "went" },
+                { question: "Which of these is a synonym for 'fast'?", options: ["quick", "slow", "happy", "angry"], answer: "quick" },
+                { question: "What is the plural form of 'child'?", options: ["childs", "children", "childes", "childer"], answer: "children" },
+                { question: "Which word is an adjective?", options: ["blue", "run", "quickly", "jump"], answer: "blue" },
+                { question: "What is the past tense of 'eat'?", options: ["ate", "eated", "eats", "eaten"], answer: "ate" },
+                { question: "What is the opposite of 'hard'?", options: ["soft", "rough", "sharp", "smooth"], answer: "soft" },
+                { question: "Which sentence is correct?", options: ["She go to school", "She goes to school", "She going to school", "She gone to school"], answer: "She goes to school" },
+                { question: "Which word is a preposition?", options: ["on", "dog", "running", "happy"], answer: "on" }
+            ],
+            chemistry: [
+                { question: "What is the chemical symbol for water?", options: ["O2", "H2O", "CO2", "N2"], answer: "H2O" },
+                { question: "What is the atomic number of Carbon?", options: ["6", "7", "8", "9"], answer: "6" },
+                { question: "Which of these is a noble gas?", options: ["Helium", "Oxygen", "Nitrogen", "Carbon"], answer: "Helium" },
+                { question: "What is the molecular formula for methane?", options: ["CH4", "C2H6", "CO2", "H2O"], answer: "CH4" },
+                { question: "What is the pH of water?", options: ["7", "8", "9", "10"], answer: "7" },
+                { question: "What is the chemical symbol for gold?", options: ["Au", "Ag", "Pb", "Fe"], answer: "Au" },
+                { question: "What is the chemical formula for hydrochloric acid?", options: ["HCl", "H2SO4", "HNO3", "NaOH"], answer: "HCl" },
+                { question: "What is the most abundant element in the Earth's atmosphere?", options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Argon"], answer: "Nitrogen" },
+                { question: "Which gas is produced when acid reacts with metal?", options: ["Oxygen", "Hydrogen", "Carbon Dioxide", "Nitrogen"], answer: "Hydrogen" },
+                { question: "What is the atomic number of Oxygen?", options: ["8", "7", "6", "9"], answer: "8" }
+
+            ],
+            physics: [
+                { question: "What is the speed of light?", options: ["3x10^8 m/s", "2x10^8 m/s", "1x10^8 m/s", "4x10^8 m/s"], answer: "3x10^8 m/s" },
+                { question: "What is the unit of force?", options: ["Newton", "Joule", "Pascal", "Watt"], answer: "Newton" },
+                { question: "What is the formula for kinetic energy?", options: ["KE = mv", "KE = mv^2", "KE = 1/2mv^2", "KE = 2mv^2"], answer: "KE = 1/2mv^2" },
+                { question: "Who developed the theory of relativity?", options: ["Newton", "Einstein", "Galileo", "Curie"], answer: "Einstein" },
+                { question: "What is the center of an atom called?", options: ["Electron", "Proton", "Neutron", "Nucleus"], answer: "Nucleus" },
+                { question: "What is the formula for work?", options: ["W = Fd", "W = mv", "W = mgh", "W = 1/2mv^2"], answer: "W = Fd" },
+                { question: "Who discovered the laws of motion?", options: ["Newton", "Einstein", "Galileo", "Kepler"], answer: "Newton" },
+                { question: "What is the SI unit of power?", options: ["Watt", "Joule", "Newton", "Coulomb"], answer: "Watt" },
+                { question: "Which of these is a type of energy?", options: ["Kinetic", "Electricity", "Potential", "All of the above"], answer: "All of the above" },
+                { question: "Which particle has a positive charge?", options: ["Electron", "Proton", "Neutron", "Photon"], answer: "Proton" }
+            ],
+            biology: [
+                { question: "What is the powerhouse of the cell?", options: ["Nucleus", "Mitochondria", "Ribosome", "Chloroplast"], answer: "Mitochondria" },
+                { question: "What is the process by which plants make their food?", options: ["Respiration", "Photosynthesis", "Fermentation", "Digestion"], answer: "Photosynthesis" },
+                { question: "What is the study of genes called?", options: ["Genetics", "Biochemistry", "Microbiology", "Anatomy"], answer: "Genetics" },
+                { question: "Which blood type is considered the universal donor?", options: ["A", "B", "AB", "O"], answer: "O" },
+                { question: "What organ is responsible for pumping blood?", options: ["Brain", "Liver", "Heart", "Lungs"], answer: "Heart" },
+                { question: "What is the largest organ in the human body?", options: ["Brain", "Heart", "Lungs", "Skin"], answer: "Skin" },
+                { question: "What is the main component of the cell membrane?", options: ["Proteins", "Lipids", "Carbohydrates", "Nucleic acids"], answer: "Lipids" },
+                { question: "What is the basic unit of life?", options: ["Atom", "Molecule", "Cell", "Organ"], answer: "Cell" },
+                { question: "Which organ is responsible for filtering blood?", options: ["Kidney", "Liver", "Heart", "Lungs"], answer: "Kidney" },
+                { question: "What type of cell division is responsible for growth?", options: ["Mitosis", "Meiosis", "Fission", "Budding"], answer: "Mitosis" }
+            ],
+            history: [
+                { question: "Who was the first president of the United States?", options: ["George Washington", "Abraham Lincoln", "Thomas Jefferson", "John Adams"], answer: "George Washington" },
+                { question: "Which war was fought between the North and South in America?", options: ["Civil War", "World War I", "Revolutionary War", "Vietnam War"], answer: "Civil War" },
+                { question: "Who discovered America?", options: ["Christopher Columbus", "Marco Polo", "Vasco da Gama", "Leif Erikson"], answer: "Christopher Columbus" },
+                { question: "What was the name of the ship the Pilgrims traveled on?", options: ["Mayflower", "Santa Maria", "Titanic", "Endeavour"], answer: "Mayflower" },
+                { question: "In what year did World War II end?", options: ["1940", "1941", "1945", "1950"], answer: "1945" },
+                { question: "Who wrote the Declaration of Independence?", options: ["George Washington", "Thomas Jefferson", "Abraham Lincoln", "John Adams"], answer: "Thomas Jefferson" },
+                { question: "Which empire was ruled by Julius Caesar?", options: ["Roman Empire", "Ottoman Empire", "Persian Empire", "Greek Empire"], answer: "Roman Empire" },
+                { question: "Who was the first emperor of China?", options: ["Qin Shi Huang", "Genghis Khan", "Emperor Hirohito", "Emperor Wu"], answer: "Qin Shi Huang" },
+                { question: "What was the Cold War?", options: ["A conflict between the US and Soviet Union", "A war in Korea", "A conflict in Vietnam", "The rise of Nazi Germany"], answer: "A conflict between the US and Soviet Union" },
+                { question: "Which country was the first to land a man on the moon?", options: ["USA", "Russia", "China", "India"], answer: "USA" }
+            ],
+            literature: [
+                { question: "Who wrote 'Romeo and Juliet'?", options: ["William Shakespeare", "Charles Dickens", "Mark Twain", "Jane Austen"], answer: "William Shakespeare" },
+                { question: "What is the main theme of '1984'?", options: ["Freedom", "Surveillance", "Nature", "Science"], answer: "Surveillance" },
+                { question: "Who wrote 'Moby Dick'?", options: ["Herman Melville", "J.R.R. Tolkien", "George Orwell", "F. Scott Fitzgerald"], answer: "Herman Melville" },
+                { question: "What is the first book of the Bible?", options: ["Genesis", "Exodus", "Leviticus", "Deuteronomy"], answer: "Genesis" },
+                { question: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "J.K. Rowling", "John Steinbeck", "Ernest Hemingway"], answer: "Harper Lee" },
+                { question: "What is the genre of 'The Catcher in the Rye'?", options: ["Drama", "Fiction", "Science Fiction", "Biography"], answer: "Fiction" },
+                { question: "Who is the author of 'Pride and Prejudice'?", options: ["Jane Austen", "Charlotte Bronte", "Emily Dickinson", "Agatha Christie"], answer: "Jane Austen" },
+                { question: "What is the most famous work by Edgar Allan Poe?", options: ["The Raven", "The Tell-Tale Heart", "Murder in the Rue Morgue", "The Fall of the House of Usher"], answer: "The Raven" },
+                { question: "Who wrote 'Frankenstein'?", options: ["Mary Shelley", "Bram Stoker", "Oscar Wilde", "F. Scott Fitzgerald"], answer: "Mary Shelley" },
+                { question: "What is the title of the first Harry Potter book?", options: ["The Chamber of Secrets", "The Philosopher's Stone", "The Goblet of Fire", "The Prisoner of Azkaban"], answer: "The Philosopher's Stone" }
+            ],
+            philosophy: [
+                { question: "Who is considered the father of philosophy?", options: ["Socrates", "Plato", "Aristotle", "Descartes"], answer: "Socrates" },
+                { question: "What is the study of being called?", options: ["Epistemology", "Ontology", "Ethics", "Aesthetics"], answer: "Ontology" },
+                { question: "What does 'Cogito, ergo sum' mean?", options: ["I think, therefore I am", "I am, therefore I think", "I feel, therefore I exist", "I see, therefore I understand"], answer: "I think, therefore I am" },
+                { question: "Which philosopher is known for his theory of the forms?", options: ["Plato", "Aristotle", "Kant", "Hume"], answer: "Plato" },
+                { question: "What is the branch of philosophy that deals with ethics?", options: ["Logic", "Aesthetics", "Ethics", "Epistemology"], answer: "Ethics" },
+                { question: "Who is known for the phrase 'The unexamined life is not worth living'?", options: ["Socrates", "Plato", "Aristotle", "Nietzsche"], answer: "Socrates" },
+                { question: "Which philosopher said 'Man is the measure of all things'?", options: ["Socrates", "Plato", "Protagoras", "Aristotle"], answer: "Protagoras" },
+                { question: "What is the study of knowledge called?", options: ["Epistemology", "Metaphysics", "Ontology", "Ethics"], answer: "Epistemology" },
+                { question: "Which philosopher introduced the concept of the 'categorical imperative'?", options: ["Kant", "Hume", "Nietzsche", "Descartes"], answer: "Kant" },
+                { question: "Who is known for his work 'Critique of Pure Reason'?", options: ["Immanuel Kant", "John Locke", "Hegel", "Friedrich Nietzsche"], answer: "Immanuel Kant" }
+            ]
+        };
+
+
+        // Select Subject
+        function goToInstructions(subject) {
+            
+            document.getElementById('subjectSelectionPage').style.display = 'none';
+            document.getElementById('instructionsPage').style.display = 'block';
+
+            
+            window.selectedSubject = subject;
+        }
+
+        // Start Quiz
+        function startQuiz() {
+        
+            document.getElementById('instructionsPage').style.display = 'none';
+            document.getElementById('quizPage').style.display = 'block';
+
+            startTimer();
+           
+            loadQuestion();
+        }
+
+        // Timer function
+        function startTimer() {
+            interval = setInterval(function () {
+                timeLeft--;
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                document.getElementById('timerQuiz').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        // Load Question
+        function loadQuestion() {
+            const subjectQuestions = questions[window.selectedSubject];
+            const currentQuestion = subjectQuestions[currentQuest];
+
+            // Set question number and text
+            document.getElementById('questionNumber').textContent = `Question ${currentQuest + 1}`;
+            document.getElementById('questionText').textContent = currentQuestion.question;
+
+            // Clear previous options
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+
+            // Insert new options with radio buttons
+            currentQuestion.options.forEach((option, index) => {
+                const label = document.createElement('label');
+                const radioInput = document.createElement('input');
+                radioInput.type = 'radio';
+                radioInput.name = `question${currentQuest}`;
+                radioInput.value = option;
+                radioInput.classList.add('mr-2');
+                radioInput.onclick = function () { selectAnswer(option); };
+
+                label.appendChild(radioInput);
+                label.appendChild(document.createTextNode(option));
+                label.classList.add('block', 'py-2', 'mb-2', 'cursor-pointer');
+
+                optionsDiv.appendChild(label);
+            });
+
+            // Show or hide prev/next buttons
+            document.getElementById('prevBtn').style.display = currentQuest > 0 ? 'inline-block' : 'none';
+            document.getElementById('nextBtn').style.display = currentQuest < subjectQuestions.length - 1 ? 'inline-block' : 'none';
+        }
+
+        let selectedAnswers = [];
+
+        // Select Answer
+        function selectAnswer(answer) {
+            selectedAnswers[currentQuest] = answer;
+        }
+
+        // Previous Question
+        function prevQuestion() {
+            if (currentQuest > 0) {
+                currentQuest--;
+                loadQuestion();
+            }
+        }
+
+        // Next Question
+        function nextQuestion() {
+            if (currentQuest < questions[window.selectedSubject].length - 1) {
+                currentQuest++;
+                loadQuestion();
+            }
+        }
+
+        // Submit Quiz and Save to Local Storage
+        function submitQuiz() {
+            // Calculate the score
+            let correctAnswers = 0;
+            const subjectQuestions = questions[window.selectedSubject];
+            for (let i = 0; i < subjectQuestions.length; i++) {
+                if (selectedAnswers[i] === subjectQuestions[i].answer) {
+                    correctAnswers++;
+                }
+            }
+
+            // Calculate percentage
+            const percentage = (correctAnswers / subjectQuestions.length) * 100;
+
+            // Create a result message
+            let message = '';
+            if (percentage >= 60) {
+                message = `Congratulations! You passed this test with a score of ${percentage.toFixed(2)}%.`;
+            } else {
+                message = `Oops! You failed this test. Study hard and try again later. Your score is ${percentage.toFixed(2)}%.`;
+            }
+
+            // Store the results in localStorage using JSON
+            const result = {
+                score: correctAnswers,
+                percentage: percentage,
+                feedback: message
+            };
+            localStorage.setItem('quizResult', JSON.stringify(result));
+
+            // Hide quiz page and show results
+            clearInterval(interval);
+            document.getElementById('quizPage').style.display = 'none';
+
+            // Show the message directly in the result page
+            const resultDiv = document.getElementById('resultPage');
+            resultDiv.innerHTML = `<p class="text-center font-semibold text-lg">${message}</p>`;
+            resultDiv.style.display = 'block';
+        }
+
+        // On page load, check if there's a saved result in localStorage and display it
+        window.onload = function () {
+            const savedResult = localStorage.getItem('quizResult');
+            if (savedResult) {
+                const result = JSON.parse(savedResult);
+
+            }
+        };
+    </script>
+
+</body>
+
+</html>
